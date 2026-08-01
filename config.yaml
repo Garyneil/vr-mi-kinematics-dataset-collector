@@ -3,7 +3,7 @@ runtime:
     port: "/dev/ttyTHS0"
     baudrate: 115200
     timeout_sec: 1.0
-    frame_mode: "legacy26"   # legacy26 or counter30
+    frame_mode: "legacy26"   # legacy26 或 counter30
     header: 255
     tail: 254
     sampling_rate_hz: 250.0
@@ -33,6 +33,36 @@ hardware:
   ground: "TBD"
   physical_units: "raw_adc"
 
+mocap:
+  enabled: false
+  adapter: "none"            # none 或 generic_udp，后续可扩展厂商 SDK
+  host: "0.0.0.0"
+  port: 7001
+  sampling_rate_hz: null      # 设备确认后填写
+  coordinate_system: "TBD"
+  position_unit: "TBD"
+  orientation_format: "TBD"
+  node_names: []              # 设备确认后填写，例如 shoulder/elbow/wrist/hand
+  record_during_motor_imagery: true
+  use_for_movement_contamination_screening: true
+
+vr:
+  enabled: false
+  engine: "TBD"              # Unity / Unreal / other
+  event_transport: "udp"
+  host: "127.0.0.1"
+  port: 7002
+  headset_model: "TBD"
+  controller_tracking: false
+
+synchronization:
+  master_clock: "host_monotonic"
+  save_host_timestamp: true
+  save_device_packet_id: true
+  save_device_timestamp: false
+  vr_event_timestamp_source: "host_receive_time"
+  mocap_timestamp_source: "TBD"
+
 protocol:
   tasks:
     - "grasp"
@@ -57,7 +87,7 @@ stages:
     record_kinematics: true
     enable_feedback: false
   motor_imagery:
-    record_kinematics: false
+    record_kinematics: true    # 仅用于静止检测，不作为模型输入
     enable_feedback: false
   closed_loop:
     record_kinematics: false
@@ -67,3 +97,7 @@ quality_control:
   expected_sampling_tolerance: 0.08
   reject_on_packet_loss: false
   maximum_packet_loss_ratio: 0.01
+  movement_screening:
+    enabled: false
+    hand_displacement_threshold_m: null
+    wrist_velocity_threshold_mps: null
