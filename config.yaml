@@ -1,0 +1,69 @@
+runtime:
+  serial:
+    port: "/dev/ttyTHS0"
+    baudrate: 115200
+    timeout_sec: 1.0
+    frame_mode: "legacy26"   # legacy26 or counter30
+    header: 255
+    tail: 254
+    sampling_rate_hz: 250.0
+    eeg_channels: 8
+    ecg_channels: 4
+    eeg_scale: 1.0
+    ecg_scale: 1.0
+  output_dir: "data/raw"
+  random_seed: 42
+
+hardware:
+  eeg_channel_names:
+    - "EEG1"
+    - "EEG2"
+    - "EEG3"
+    - "EEG4"
+    - "EEG5"
+    - "EEG6"
+    - "EEG7"
+    - "EEG8"
+  ecg_channel_names:
+    - "ECG1"
+    - "ECG2"
+    - "ECG3"
+    - "ECG4"
+  reference: "TBD"
+  ground: "TBD"
+  physical_units: "raw_adc"
+
+protocol:
+  tasks:
+    - "grasp"
+    - "handover"
+    - "place"
+    - "press"
+  blocks: 6
+  trials_per_task_per_block: 10
+  baseline_duration_sec: 30.0
+  fixation_duration_sec: 2.0
+  cue_duration_sec: 1.0
+  execution_duration_sec: 4.0
+  imagery_duration_sec: 4.0
+  feedback_duration_sec: 1.5
+  iti_min_sec: 2.0
+  iti_max_sec: 3.5
+  max_same_task_in_row: 2
+  block_break_sec: 180.0
+
+stages:
+  overt_execution:
+    record_kinematics: true
+    enable_feedback: false
+  motor_imagery:
+    record_kinematics: false
+    enable_feedback: false
+  closed_loop:
+    record_kinematics: false
+    enable_feedback: true
+
+quality_control:
+  expected_sampling_tolerance: 0.08
+  reject_on_packet_loss: false
+  maximum_packet_loss_ratio: 0.01
